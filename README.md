@@ -16,10 +16,10 @@ AppSet 預設3分鐘掃描一次，剛添加可能不會馬上出現新的App
 ## bootstrap
 
 bootstrap-app.yaml 單純用於 app of apps 管理所有 env-appset
+
 env-appset 則是負責動態掃描，特定環境的部屬檔
 
-搭配部分 helm charts 的 values 搭配deploy目錄結構 /ns/app/env 動態生成 這些 values 值
-目錄 即 部屬環境及應用名稱，未來只要建立目錄就是建立好名稱
+基礎的資源名稱 透過目錄結構 /ns/app/env 代表 命名空間 應用名稱 環境 (這點配合helm的template value規劃好)
 
 ## deploy
 
