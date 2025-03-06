@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: bootstrap-app
+  namespace: argocd
+  labels:
+    app.kubernetes.io/name: bootstrap-app
+    app.kubernetes.io/part-of: argocd
+    app.kubernetes.io/managed-by: argocd
+spec:
+  project: default
+  source:
+    repoURL: '<>'
+    targetRevision: HEAD
+    path: '/bootstrap/appsets'
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: argocd
+  syncPolicy:
+    syncOptions:
+      - ApplyOutOfSyncOnly=true
+      - RespectIgnoreDifferences=true
+      - PreserveResourcesOnDeletion=true

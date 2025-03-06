@@ -1,0 +1,44 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: dev-appset
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+  - git:
+      repoURL: <>
+      revision: HEAD
+      files:
+      - path: deploy/apps/*/*/dev/template.yaml
+  template:      
+    metadata:
+      name: '{{index .path.segments 3}}-{{index .path.segments 4}}'
+    spec:
+      project: default
+      source:
+        repoURL: <>
+        targetRevision: HEAD
+        path: '/deploy/templates/{{.template}}'
+        helm:
+          valueFiles:
+            - '/{{.path.path}}/values.yaml'
+          ignoreMissingValueFiles: false
+          parameters:
+            - name: "name"
+              value: '{{index .path.segments 3}}'
+            - name: "namespace"
+              value: '{{index .path.segments 2}}'
+            - name: "env"
+              value: '{{index .path.segments 4}}'
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{index .path.segments 2}}'
+      syncPolicy:
+        syncOptions:
+          - ApplyOutOfSyncOnly=true
+          - RespectIgnoreDifferences=true
+          - PrunePropagationPolicy=foreground
+        automated:
+          prune: true
