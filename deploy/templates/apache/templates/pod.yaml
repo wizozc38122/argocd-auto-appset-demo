@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{.Values.name}}
+  namespace: {{.Values.namespace}}
+  labels:
+    app: {{.Values.name}}
+    env: {{.Values.env}}
+    app.kubernetes.io/name: {{.Values.name}}
+spec:
+  containers:
+    - name: apache
+      image: httpd:latest
+      ports:
+        - containerPort: 80
